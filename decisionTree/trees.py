@@ -78,12 +78,37 @@ def createTree(dataSet,labels):
         #splitDataSet(dataSet,bestFeature,value) 在已有的数据集上，筛选特征值bestFeature=value的子集，供下一次建立子树使用
     return mytree
         
+def classify(input,featLabels,testVec):
+    firstStr=list(input.keys())[0]
+    secondDict=input[firstStr]
+    featIndex=featLabels.index(firstStr)
+    for key in secondDict.keys():
+        if testVec[featIndex]==key:
+            if type(secondDict[key]) is dict:
+                classLabel=classify(secondDict[key],featLabels,testVec)
+            else:
+                classLabel=secondDict[key]
+    return classLabel
+
+def storeTree(inputTree,fileName):
+    import pickle
+    fw=open(fileName,'wb+')
+    pickle.dump(input,fw,protocol=pickle.HIGHEST_PROTOCOL)
+    fw.close()
+def grapTree(fileName):
+    import pickle
+    fr=open(fileName,'rb+')
+    tree= pickle.load(fr)
+    return tree;
+    
 
 dataSet,label=createDataSet()
 shannonEnt=calcShannonEnt(dataSet)
 tree=createTree(dataSet,label)
-print(shannonEnt)
-print(splitDataSet(dataSet,0,0))
-print(splitDataSet(dataSet,0,1))
-print(chooseBestFeatureToSplit(dataSet))
 print(tree)
+storeTree(tree,'myTree.txt')
+myTree=grapTree('myTree.txt')
+print(myTree)
+myClass=[1,0]
+dataSet,label=createDataSet()
+print(classify(myTree,label,myClass))
