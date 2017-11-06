@@ -92,12 +92,12 @@ def classify(input,featLabels,testVec):
 
 def storeTree(inputTree,fileName):
     import pickle
-    fw=open(fileName,'wb+')
-    pickle.dump(input,fw,protocol=pickle.HIGHEST_PROTOCOL)
+    fw=open(fileName,'wb')
+    pickle.dump(inputTree,fw,protocol=pickle.HIGHEST_PROTOCOL)
     fw.close()
 def grapTree(fileName):
     import pickle
-    fr=open(fileName,'rb+')
+    fr=open(fileName,'rb')
     tree= pickle.load(fr)
     return tree;
     
